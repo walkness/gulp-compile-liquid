@@ -4,7 +4,7 @@
   "description": "Compile Liquid templates to file - gulp plugin",
   "dependencies": {
     "gulp-util": "~3.0.3",
-    "liquid-node": "^2.6.1",
+    "liquid-node": "^3.0.0",
     "through2": "~2.0.0"
   },
   "files": [
