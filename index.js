@@ -2,13 +2,14 @@ var gutil = require('gulp-util');
 var through = require('through2');
 var extend = require('util')._extend;
 
-var Liquid = require("liquid-node");
-var engine = new Liquid.Engine;
+var Liquid = require("liquidjs");
 
 
 function liquid(opts) {
 
 	var options = opts || {};
+
+  var engine = new Liquid(opts);
 
 	return through.obj(function (file, enc, cb) {
 		var _data = options.data || {};
@@ -36,17 +37,12 @@ function liquid(opts) {
 				_data = options.dataEach(_data, file);
 			}
 
-			if (options.rootPath) {
-				engine.registerFileSystem(new Liquid.LocalFileSystem(options.rootPath));
-			}
-
 		} catch (err) {
 			_that.emit('error', new gutil.PluginError('gulp-compile-liquid', err));
 		}
 
 		engine
-		.parse(fileContents)
-		.then(function(template) { return template.render(_data); })
+		.parseAndRender(fileContents, _data)
 		.then(function(result) {
 			file.contents = new Buffer(result);
 			_that.push(file);
